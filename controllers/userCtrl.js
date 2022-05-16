@@ -2,7 +2,7 @@ const BaseController = require("./baseCtrl.js")
 const bcrypt = require('bcrypt')
 // const { PW_SALT_ROUND, JWT_SALT } = process.env
 const jwt = require('jsonwebtoken')
-var ObjectId = require('mongodb').ObjectID;
+var ObjectId = require('mongodb').ObjectId;
 
 class UserController extends BaseController {
   constructor(model, salt) {

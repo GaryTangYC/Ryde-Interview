@@ -13,7 +13,7 @@ This document will walk you through how the creation, details, and reflection to
 
 ## 1. Tech Stack
 
-This project was developed with Node, with an Express framework and is connected to a MongoDB which served as a database (DB).
+This project was developed with NodeJS, with an Express framework and is connected to a MongoDB which served as a database (DB).
 
 ---
 
@@ -188,10 +188,38 @@ Deleted userId: 627f76aedab5e514afc4fdf3
 
 ## 4. Testing of APIs
 
+The APIs was mainly tested via POSTMAN.
+
+All APIs are tested for the correct status code `tests["Status Code should be 200"] = responseCode.code === 200` and proper response message.
+
+Subsequently any creation or amendment of data in the DB are cross-checked for proper insertion.
+
 ![](./Postman-Test.gif)
 
 ## 5. User Authentication
 
 For the purpose of attempting the advanced requirements of user auth, email and password has been included as part of the user Model.
 
+JSON Web Token (JWT) and Bcrypt for password hashing are used for secure encryption of password and login process.
+
+During sign-up, users are required to provide a password for their account login. This password will be hash based on a secret/SALT stored at our server end. Future logins require the same hashed password to match prior to user being able to be authenticated and login securely.
+
+Post-creation or sign-in of a user, a bearer token will be generated which will be stored as a header on the browser local storage. For transmission of information between both the user and the server, the token/signature needs to be validated. This would help prevent any unauthorised hacker from accessing the server database without a valid token.
+
 ## 6. Personal Reflections
+
+I hope the codes and documentation does provide the necessary interpretation for the Ryde Back-end Developer Test.
+
+Given the constraint of time, there were certainly more aspects in which I could definitely improve on:
+
+- I think I could have done more with the unit testing requirement of the project by utilising tools such as Jest/Supertest or Mocha/Chai.
+  <br>
+  The current usage of Postman will not be the best option as the API scale in size
+
+- Individual APIs for Update functionality can be built for each Keys data
+
+- Further input validation & structuring of address data (rather than just a STRING type) will be beneficial in the long-run for data cleanliness. Set format and date.
+
+Thank you for your time in reading this and I look forward to hearing from you!
+
+GaryT

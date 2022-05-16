@@ -36,5 +36,3 @@ app.use("/user", new UserRouter(userControl).router());
 app.listen(PORT || 3004, () => {
   console.log(`bckend server is running on ${3004}`);
 });
-
-module.exports = app;
