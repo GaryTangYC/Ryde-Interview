@@ -1,7 +1,8 @@
 const BaseController = require("./baseCtrl.js")
 const bcrypt = require('bcrypt')
-const { PW_SALT_ROUND, JWT_SALT } = process.env
+// const { PW_SALT_ROUND, JWT_SALT } = process.env
 const jwt = require('jsonwebtoken')
+var ObjectId = require('mongodb').ObjectID;
 
 class UserController extends BaseController {
   constructor(model, salt) {
@@ -12,13 +13,15 @@ class UserController extends BaseController {
     try {
       console.log('req.body:', req.body)
       const { name, dob, address, description, email, password } = req.body;
-      console.log("name is:", name)
+
+      var _id = ObjectId();
 
       const convertDob = new Date(dob)
 
       const hashedPass = bcrypt.hashSync(password, 8);
 
       const newUser = await this.model.create({
+        _id,
         name,
         dob: convertDob,
         address,
@@ -30,17 +33,18 @@ class UserController extends BaseController {
       // if (!newUser) {
       //   throw Error;
       // } else {
-      //   const token = jwt.sign({}, this.salt, { expiresIn: "6h" });
+      const token = jwt.sign({}, this.salt, { expiresIn: "6h" });
       const result = {
-        id: newUser._id,
+        _id: newUser._id,
         token,
         name,
         dob,
         address,
         description,
         email,
+        createdAt: newUser.createdAt
       };
-      res.send(result);
+      res.send({ message: 'User Created', result });
       // }
     } catch (err) {
       let msg;
@@ -72,7 +76,7 @@ class UserController extends BaseController {
     try {
       const user = await this.model.deleteOne({ _id: id })
       const successMsg = `Deleted userId: ${id}`
-      res.send(succcessMsg)
+      res.send(successMsg)
     } catch (err) {
       const msg = "Deletion error, please try again";
       this.errorHandler(err, msg, res)
@@ -84,12 +88,17 @@ class UserController extends BaseController {
     const { id, name, dob, address, description, email, password } = req.body;
 
     try {
+      // Hashed pass for storage into DB
+      const hashedPass = bcrypt.hashSync(password, 8);
+
+      // Search DB based on user ID and update fields based on input
+
       const updateData = await this.model.findOneAndUpdate(
         { _id: id },
-        { name, dob, description, email },
+        { name, dob, description, email, address, password: hashedPass },
         { new: true }
       );
-      res.send(updateData);
+      res.send({ message: 'Update success', updateData });
     } catch (err) {
       const msg =
         "Something went wrong with the update, pls login and try again";

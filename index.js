@@ -1,4 +1,5 @@
 const express = require('express')
+const request = require("supertest")
 const mongoose = require('mongoose')
 const dotenv = require('dotenv');
 dotenv.config();
@@ -35,3 +36,5 @@ app.use("/user", new UserRouter(userControl).router());
 app.listen(PORT || 3004, () => {
   console.log(`bckend server is running on ${3004}`);
 });
+
+module.exports = app;
